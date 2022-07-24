@@ -1,15 +1,33 @@
-postgres:
-	docker run --name postgres13 -p 5432:5432 -e POSTGRES_USER=restaurant -e POSTGRES_PASSWORD=aaa -d postgres:13
+gen_req:
+	rm requirements.txt && python -m pip freeze > requirements.txt
 
-createdb:
-	docker exec -it postgres13 createdb --username=restaurant --owner=restaurant restaurant
+add_migration:
+ifdef name
+	alembic revision -m ${name}
+else
+	@echo '"name" is not defined. Please add a name for the migration.'
+endif
 
-dropdb:
-	docker exec -it postgres13 dropdb restaurant
+migrateup:
+	alembic upgrade head
+
+migrateup1:
+	alembic upgrade +1
+
+migratedown:
+ifdef rev
+	alembic downgrade ${rev}
+else
+	alembic downgrade base
+endif
+
+migratedown1:
+	alembic downgrade -1
 
 start-dev:
-	@$(MAKE) -C api start-dev
-start:
-	@$(MAKE) -C api start
+	uvicorn main:app --reload
 
-.PHONY: postgres createdb dropdb start-dev start
+start:
+	uvicorn main:app
+
+.PHONY: gen_req add_migration migrateup start-dev start

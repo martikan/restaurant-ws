@@ -1,10 +1,7 @@
-# meals.py
-
-from typing import List
+"""Router for meals model.
+"""
 from fastapi import APIRouter
 from pydantic import BaseModel
-
-from api.models.ingredient import Ingredient
 
 router = APIRouter(
     prefix="/meals",
@@ -12,15 +9,19 @@ router = APIRouter(
     responses={404: {"message": "Meal has not found"}}
 )
 
+# TODO: add to models.
 class MealDTO(BaseModel):
-    id: int(64)
+    """
+    DTO for meal entity.
+    """
+    id: int
     name: str
     price: float
     spicy: int
     vegan: bool
     gluten_free: bool
     kcal: int
-    ingredients: List[Ingredient]
+    # ingredients: List[Ingredient]
 
 @router.get("/")
 async def get_meals():
