@@ -16,14 +16,19 @@ router = APIRouter(
 async def get_ingredients():
     return ingredientService.find_all()
 
-@router.post("/")
+@router.post("/", response_model=IngredientAll)
 async def create_ingredient(payload: IngredientCreate):
     return await ingredientService.save(payload)
 
-# @router.get("/{id}")
-# async def get_ingredient_by_id(id: int(64)):
-#     return id
+@router.get("/{id}", response_model=IngredientAll)
+async def get_ingredient_by_id(id: int):
+    return await ingredientService.find_by_id(id)
 
-# @router.put("/{id}")
-# async def update_ingredients(id: int, payload: MealDTO):
-#     return {"id": id, "meal": meal}
+@router.put("/{id}", response_model=IngredientAll)
+async def update_ingredients(id: int, payload: IngredientCreate):
+    return await ingredientService.update(id, payload)
+
+@router.delete("/{id}")
+async def delete_ingredient_by_id(id: int):
+    await ingredientService.delete_by_id(id)
+    return 
