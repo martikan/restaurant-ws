@@ -18,7 +18,7 @@ async def get_ingredients():
     """Controller to get all ingredients.
     """
     
-    return ingredientService.find_all()
+    return await ingredientService.find_all()
 
 @router.post("/", response_model=IngredientAll)
 async def create_ingredient(payload: IngredientCreate):
