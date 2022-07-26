@@ -1,5 +1,6 @@
 """Router for meals model.
 """
+
 from fastapi import APIRouter
 from pydantic import BaseModel
 

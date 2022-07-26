@@ -1,16 +1,19 @@
 """ Model for ingredients.
 """
+
 from pydantic import BaseModel
 
-""" IngredientCreate
-Model for create new ingredients.
-"""
 class IngredientCreate(BaseModel):
+    """
+    Model for create new ingredients.
+    """
+    
     name: str
 
-""" IngredientAll
-Model which contains all ingredient fields.
-"""
 class IngredientAll(BaseModel):
+    """
+    Model which contains all ingredient fields.
+    """
+    
     id: int
     name: str
