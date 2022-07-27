@@ -40,6 +40,20 @@ async def update(id: int, payload: IngredientCreate):
     return {"id": id, **payload.dict()}
     
 
+# async def delete_all():
+#     """Service to delete all ingredients.
+#     Returns STATUS 404 if it's not exist.
+#     Else return STATUS 200 with DELETED message.
+#     fe.: {"status_code": 200, "message": "DELETED"}
+#     """
+
+#     # Check foreign keys.
+#     query = meals_ingredients.select().where(meals_ingredients.c.ingredient_id)
+
+#     # Delete all ingredients.
+#     query = ingredients.delete()
+#     await database.execute(query)
+
 async def delete_by_id(id: int):
     """Service to delete an ingredient by id.
     """

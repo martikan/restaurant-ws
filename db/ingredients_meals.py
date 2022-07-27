@@ -2,7 +2,6 @@
 """
 
 from sqlalchemy import Table, Column, Integer, String, Float, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
 
 from db.db import Metadata
 
@@ -12,7 +11,7 @@ meals_ingredients = Table(
     
     Metadata,
     Column("meal_id", ForeignKey("meals.id"), primary_key=True),
-    Column("meal_id", ForeignKey("ingredients.id"), primary_key=True),
+    Column("ingredient_id", ForeignKey("ingredients.id"), primary_key=True),
 )
 
 # Ingredients table.
