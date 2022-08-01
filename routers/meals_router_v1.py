@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 router = APIRouter(
-    prefix="/meals",
+    prefix="/v1/meals",
     tags=["meals"],
     responses={404: {"message": "Meal has not found"}}
 )

@@ -1,9 +1,9 @@
 """ Manage database connection.
 """
 
-from sqlalchemy import (create_engine)
+from sqlalchemy import MetaData
 from databases import Database
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext import asyncio
 
 from configs import settings
 
@@ -11,8 +11,8 @@ datasource_url = settings.get_datasource_url()
 
 database = Database(datasource_url)
 
-Base = declarative_base()
+metadata = MetaData()
 
-Metadata = Base.metadata
-
-engine = create_engine(datasource_url)
+engine = asyncio.create_async_engine(datasource_url,
+                                     echo = True if settings.is_development() else False,
+                                     future = True)

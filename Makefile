@@ -28,6 +28,6 @@ start-dev:
 	uvicorn main:app --reload
 
 start:
-	uvicorn main:app
+	export PROFILE=prod && uvicorn main:app
 
 .PHONY: gen_req add_migration migrateup start-dev start
