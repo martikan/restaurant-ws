@@ -33,23 +33,23 @@ async def get_ingredient_by_id(id: int):
     
     return await ingredients_service.find_by_id(id)
 
-# @router.put("/{id}", response_model=Ingredient)
-# async def update_ingredients(id: int, payload: CreateUpdateIngredient):
-#     """Controller to update an ingredient by id.
-#     """
+@router.put("/{id}", response_model=Ingredient)
+async def update_ingredients(id: int, payload: CreateUpdateIngredient):
+    """Controller to update an ingredient by id.
+    """
     
-#     return await ingredients_service.update(id, payload)
+    return await ingredients_service.update(id, payload)
 
-# async def delete_all_ingredients():
-#     """Controller to delete all ingredients.
-#     """
+@router.delete("/delete-all-removable")
+async def delete_all_ingredients() -> None:
+    """Controller to delete all removable ingredients.
+    """
 
-#     #TODO: add service for it.
+    await ingredients_service.delete_all_removable()
 
-# @router.delete("/{id}")
-# async def delete_ingredient_by_id(id: int):
-#     """Controller to delete an ingredient by id.
-#     """
+@router.delete("/{id}")
+async def delete_ingredient_by_id(id: int) -> None:
+    """Controller to delete an ingredient by id.
+    """
     
-#     await ingredients_service.delete_by_id(id)
-#     return 
+    await ingredients_service.delete_by_id(id)

@@ -1,7 +1,7 @@
 """Data access layer for ingredients.
 """
 
-from re import A
+from ast import stmt
 from typing import List
 from models.ingredient import Ingredient, CreateUpdateIngredient
 from db.db import engine
@@ -43,40 +43,44 @@ async def save(payload: CreateUpdateIngredient) -> Ingredient:
     
     stmt = query(f"INSERT INTO ingredients(name) VALUES('{payload.name}') RETURNING id")
     async with engine.connect() as conn:
-        result = await conn.execute(stmt, (payload.name,))
+        result = await conn.execute(stmt)
         ingredient_id = result.fetchone()[0]
         await conn.commit()
         result.close()
     
     return {"id": ingredient_id, **payload.dict()}
 
-# async def update(id: int, payload: IngredientCreate):
-#     """Service to update an ingredient by id.
-#     returns an ingredient.
-#     """
+async def update(id: int, payload: CreateUpdateIngredient) -> Ingredient:
+    """Update an ingredient by id.
+    @param payload: payload of the ingredient
+    @return: Ingredient
+    """
     
-#     query = ingredients.update().where(ingredients.c.id==id).values(**payload.dict())
-#     await database.execute(query)
-#     return {"id": id, **payload.dict()}
+    stmt = query(f"UPDATE ingredients SET name='{payload.name}' WHERE id = {id} RETURNING id")
+    async with engine.connect() as conn:
+        result = await conn.execute(stmt)
+        ingredient_id = result.fetchone()[0]
+        await conn.commit()
+        result.close()
     
+    return {"id": ingredient_id, **payload.dict()}
 
-# async def delete_all():
-#     """Service to delete all ingredients.
-#     Returns STATUS 404 if it's not exist.
-#     Else return STATUS 200 with DELETED message.
-#     fe.: {"status_code": 200, "message": "DELETED"}
-#     """
+async def delete_all_removable() -> None:
+    """Delete all ingredients which ones haven't got any relationship.
+    """
 
-#     # Check foreign keys.
-#     query = meals_ingredients.select().where(meals_ingredients.c.ingredient_id)
+    stmt = query("DELETE FROM ingredients t WHERE NOT EXISTS (SELECT ingredients_id FROM meals_ingredients WHERE ingredients_id = t.id)")
+    async with engine.connect() as conn:
+        result = await conn.execute(stmt)
+        await conn.commit()
+        result.close()
 
-#     # Delete all ingredients.
-#     query = ingredients.delete()
-#     await database.execute(query)
-
-# async def delete_by_id(id: int):
-#     """Service to delete an ingredient by id.
-#     """
+async def delete_by_id(id: int) -> None:
+    """Delete an ingredient by id.
+    """
     
-#     query = ingredients.delete().where(ingredients.c.id==id)
-#     await database.execute(query)
+    stmt = query(f"DELETE FROM ingredients WHERE id = {id}")
+    async with engine.connect() as conn:
+        result = await conn.execute(stmt)
+        await conn.commit()
+        result.close()
